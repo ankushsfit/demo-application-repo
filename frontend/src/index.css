@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
   color: #f8fafc;
-  background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
+  background: radial-gradient(circle at top left, #4338ca 0%, #0f172a 45%, #020617 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -18,13 +18,16 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: transparent;
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
 #root {
   min-height: 100vh;
+  width: 100%;
 }

@@ -24,6 +24,7 @@ function App() {
   const [filter, setFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState({ type: '', message: '' })
   const [editingId, setEditingId] = useState(null)
   const [editingText, setEditingText] = useState('')
   const [editingPriority, setEditingPriority] = useState('medium')
@@ -34,6 +35,18 @@ function App() {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
     }
   }, [tasks])
+
+  useEffect(() => {
+    if (!notice.message) {
+      return undefined
+    }
+
+    const timer = window.setTimeout(() => {
+      setNotice({ type: '', message: '' })
+    }, 2400)
+
+    return () => window.clearTimeout(timer)
+  }, [notice.message])
 
   const stats = useMemo(() => {
     const completed = tasks.filter((task) => task.done).length
@@ -98,6 +111,7 @@ function App() {
     const result = validateTaskText(draft, tasks)
     if (typeof result === 'string') {
       setError(result)
+      setNotice({ type: 'error', message: result })
       return
     }
 
@@ -120,6 +134,7 @@ function App() {
     setPriority('medium')
     setDueDate('')
     setError('')
+    setNotice({ type: 'success', message: 'Task created successfully.' })
   }
 
   const toggleTask = (id) => {
@@ -200,6 +215,11 @@ function App() {
         </div>
 
         <form className="todo-form" onSubmit={addTask}>
+          {notice.message ? (
+            <div className={`todo-toast ${notice.type}`} role="status" aria-live="polite">
+              {notice.message}
+            </div>
+          ) : null}
           <div className="todo-input-stack">
             <input
               type="text"
@@ -208,6 +228,9 @@ function App() {
                 setDraft(event.target.value)
                 if (error) {
                   setError('')
+                }
+                if (notice.message) {
+                  setNotice({ type: '', message: '' })
                 }
               }}
               placeholder="Add a new task"

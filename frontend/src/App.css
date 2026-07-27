@@ -3,17 +3,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: clamp(16px, 3vw, 32px);
+  width: 100%;
 }
 
 .todo-card {
-  width: min(100%, 640px);
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: min(100%, 760px);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 24px;
   box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
-  padding: 28px;
+  padding: clamp(20px, 3vw, 32px);
   backdrop-filter: blur(18px);
+  position: relative;
+  overflow: hidden;
+}
+
+.todo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.16), transparent 55%);
+  pointer-events: none;
 }
 
 .todo-header {
@@ -22,6 +33,7 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .eyebrow {
@@ -29,13 +41,14 @@
   text-transform: uppercase;
   letter-spacing: 0.24em;
   font-size: 0.75rem;
-  color: #8b5cf6;
+  color: #c4b5fd;
   font-weight: 700;
 }
 
 .todo-header h1 {
   margin: 0;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  line-height: 1.1;
 }
 
 .todo-pill {
@@ -45,19 +58,47 @@
   color: #ddd6fe;
   font-size: 0.95rem;
   white-space: nowrap;
+  border: 1px solid rgba(192, 132, 252, 0.25);
 }
 
 .todo-form {
   display: flex;
   gap: 10px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.todo-toast {
+  position: absolute;
+  top: -8px;
+  right: 0;
+  z-index: 2;
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 12px 25px rgba(15, 23, 42, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.todo-toast.success {
+  background: rgba(34, 197, 94, 0.2);
+  color: #dcfce7;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+}
+
+.todo-toast.error {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.25);
 }
 
 .todo-input-stack {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex: 1;
+  flex: 1 1 360px;
 }
 
 .todo-form input,
@@ -70,6 +111,17 @@
   padding: 12px 14px;
   background: rgba(255, 255, 255, 0.06);
   color: #f8fafc;
+  width: 100%;
+}
+
+.todo-form input:focus,
+.todo-form select:focus,
+.todo-search:focus,
+.todo-edit-stack input:focus,
+.todo-edit-stack select:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.7);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
 }
 
 .todo-form input::placeholder,
@@ -85,7 +137,7 @@
 
 .todo-meta-fields select,
 .todo-meta-fields input {
-  flex: 1;
+  flex: 1 1 140px;
   min-width: 120px;
 }
 
@@ -97,7 +149,7 @@
 .mark-all-button {
   border: none;
   cursor: pointer;
-  transition: transform 180ms ease, background 180ms ease;
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .todo-form button {
@@ -106,6 +158,7 @@
   background: linear-gradient(135deg, #8b5cf6, #6366f1);
   color: white;
   font-weight: 600;
+  box-shadow: 0 12px 24px rgba(99, 102, 241, 0.2);
 }
 
 .todo-form button:hover,
@@ -115,6 +168,7 @@
 .action-button:hover,
 .mark-all-button:hover {
   transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
 }
 
 .todo-toolbar {
@@ -136,7 +190,7 @@
 
 .todo-search {
   min-width: 180px;
-  flex: 1;
+  flex: 1 1 220px;
 }
 
 .todo-filters {
@@ -179,6 +233,8 @@
   padding: 12px 14px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
 }
 
 .todo-item.is-complete .todo-text {
@@ -190,13 +246,15 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1;
+  flex: 1 1 240px;
+  min-width: 0;
 }
 
 .todo-item input {
   width: 18px;
   height: 18px;
   accent-color: #8b5cf6;
+  flex-shrink: 0;
 }
 
 .todo-text-block {
@@ -204,6 +262,7 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+  flex: 1;
 }
 
 .todo-text {
@@ -266,6 +325,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
 }
 
 .action-button {
@@ -315,13 +376,30 @@
   color: #c7d2fe;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .todo-card {
-    padding: 20px;
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .todo-toast {
+    position: static;
+    margin-bottom: 4px;
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .todo-header {
+    flex-direction: column;
   }
 
   .todo-form {
     flex-direction: column;
+  }
+
+  .todo-form button {
+    width: 100%;
   }
 
   .todo-toolbar {
@@ -329,12 +407,54 @@
     flex-direction: column;
   }
 
+  .todo-search {
+    width: 100%;
+    min-width: 0;
+  }
+
   .todo-meta-fields,
   .todo-actions {
     width: 100%;
   }
 
+  .todo-item {
+    align-items: flex-start;
+  }
+
+  .todo-item__main {
+    width: 100%;
+    align-items: flex-start;
+  }
+
   .todo-actions {
     justify-content: flex-end;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+
+  .todo-meta-fields {
+    flex-direction: column;
+  }
+
+  .todo-meta-fields select,
+  .todo-meta-fields input {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .todo-stats {
+    font-size: 0.9rem;
+  }
+
+  .filter-pill,
+  .action-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .todo-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
