@@ -208,8 +208,8 @@ function App() {
       <section className="todo-card" aria-label="Todo app">
         <div className="todo-header">
           <div>
-            <p className="eyebrow">Todo</p>
-            <h1>Stay on top of your day alway</h1>
+            <p className="eyebrow">Todo App</p>
+            <h1>Stay on top of your day always</h1>
           </div>
           <div className="todo-pill">{stats.total} tasks</div>
         </div>
